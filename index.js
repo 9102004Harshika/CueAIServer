@@ -28,11 +28,21 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+
+// Update CORS to allow your frontend's origin
+const allowedOrigins = ['https://cueai.vercel.app'];  // Replace with your actual frontend domain
 app.use(cors({
-    origin: 'https://cueai.vercel.app', // Allow requests from the Vercel frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}))
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow necessary HTTP methods
+    credentials: true // Allow cookies if needed
+}));
+
 app.use(useragent.express());
 
 // MongoDB connection
@@ -54,8 +64,12 @@ app.get('/user/:username', User);
 app.get('/user/:username/prompts', OtherPrompts);
 app.get('/user/:username/deleted-prompts', DeletedPrompts);
 app.post('/user/:username/update', UpdateUser);
-app.post('/send-otp-for-login', SendOtpForLogin);  // New OTP-based login route to send OTP
+
+// OTP Routes
+app.post('/send-otp-for-login', SendOtpForLogin);  // Send OTP for login
 app.post('/verify-otp-and-login', VerifyOtpAndLogin);
+
+// Signup and Admin
 app.post('/signup', captureLocation, Signup);
 app.post('/create-admin', Admin);
 
@@ -83,7 +97,6 @@ app.post('/resetPassword', ResetPassword);
 app.post('/admin/approvePrompt', ApprovePrompt);
 app.get('/admin/pendingPrompts', PendingPrompts);
 app.post('/admin/approved/:id', ApprovedPrompts);
-// app.delete('/admin/rejected/:id', RejectedPrompts);
 app.get('/admin/getStats', GetStats);
 app.get('/admin/getPromptStats', GetPromptStats);
 
@@ -99,6 +112,14 @@ app.delete('/clear-cart', ClearCart);
 
 // Issues routes
 app.post('/submitIssue', SubmitIssue);
+
+// Error Handling Middleware (Optional)
+app.use((err, req, res, next) => {
+    if (err) {
+        console.error('Error:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // Start the server
 const PORT = process.env.PORT || 5000;
