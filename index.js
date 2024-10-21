@@ -28,7 +28,11 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'https://cueai.vercel.app', // Allow requests from the Vercel frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}))
 app.use(useragent.express());
 
 // MongoDB connection
