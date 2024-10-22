@@ -4,7 +4,6 @@ import nodemailer from "nodemailer"
 import NodeCache from 'node-cache';
 import { PromptModel } from "../models/Prompt.js";
 import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
 import crypto from "crypto"
 const JWT_SECRET= "cueAi"
 
