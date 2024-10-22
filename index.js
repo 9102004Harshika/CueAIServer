@@ -57,7 +57,9 @@ mongoose.connect(dbURI, {
 .catch((error) => {
     console.error('Error connecting to MongoDB Atlas:', error);
 });
-
+app.get('/', (req, res) => {
+    res.send('Hello, World!');
+});
 // Routes
 app.post('/User', Users);
 app.get('/user/:username', User);
