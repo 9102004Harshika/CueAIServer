@@ -30,7 +30,7 @@ const app = express();
 app.use(express.json());
 
 // Update CORS to allow your frontend's origin
-const allowedOrigins = ['https://cueaiserver-1.onrender.com'];  // Replace with your actual frontend domain
+const allowedOrigins = ['https://cueai.netlify.app/'];  // Replace with your actual frontend domain
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
