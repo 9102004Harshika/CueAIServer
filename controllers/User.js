@@ -126,7 +126,7 @@ export const VerifyOtpAndLogin = async (req, res) => {
 export const Signup=async (req, res) => {
 
 
-  const { fname, lname, email,  accountType, joinedDate, bio, lastLogin, twitter, instagram, website } = req.body;
+  const { fname, lname, email } = req.body;
   const location = req.location;
 
   const newUser = new SignupModel({
